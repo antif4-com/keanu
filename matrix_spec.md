@@ -1,23 +1,62 @@
 *These notes are from version [1.14](https://spec.matrix.org/v1.14/) of the Matrix Specification. If no version is specified, then the content comes from that version of the matrix spec.*
 
-# Versioning
+# NEEDS
+
+This is the beginning list of a design doc for keanu. 
+
+## HTTP server
+
+keanu will be a [Rack](https://github.com/rack/rack) application. We will begin using [Puma](https://github.com/puma/puma) as the HTTP server. For an HTTP framework keanu will start using [Sinatra](https://github.com/sinatra/sinatra). 
+
+These choices are not made out of unique research or requirements driven by the keanu project but rather are considered "standard" starting points for building a ruby-based web app. We will revisit these selections as the need arrises. 
+
+## Access Tokens
+
+I wanted to use [Macaroons](https://research.google/pubs/macaroons-cookies-with-contextual-caveats-for-decentralized-authorization-in-the-cloud/) for access tokens. However, the only ruby gem I was able to find was [boulangerie](https://github.com/cryptosphere/boulangerie) which looks like what we want, but it hasn't been updated in a very long time. In addition, I don't see a lot of people discussing macaroons online in a few quick searches. This might be an incorrect view, but it doesn't look as though macaroons have taken off, despite their theoretical advantage. 
+
+As a result, good ol' oauth is most likely our best starting point for access tokens: [ruby-jwt](https://github.com/jwt/ruby-jwt)
+
+## content parsing
+
+- Everything is JSON, but should be built in a way that can be another encoding
+- base64 encoding is tied to JSON usage, since binary data can't be stored directly within JSON
+
+keanu will use the standard ruby [JSON](https://github.com/ruby/json) and [base64](https://docs.ruby-lang.org/en/3.3/Base64.html) gem/methods.
+
+In addition, we will need to build a canonical JSON wrapper, so that the data -> JSON -> base64 is deterministic for the same set of inputs. See [Canonical JSON](#Canonical-JSON)
+
+## Settings
+
+- settings aroudn how often/close to validate base64, basically slider from EVERYWHERE to NOWHERE.
+- system to handle per API deprecation/status
+- API system needs to manage multiple versions of same endpoint running side by side
+# Future Things
+
+These are things which need to be done, but I think we can ignore for the beginning. We shouldn't completely ignore them though, as we shouldn't paint ourselves in a corder implementing them after the fact:
+
+- Rate Limiting - https://spec.matrix.org/v1.14/client-server-api/#rate-limiting
+- Well-known URI - https://spec.matrix.org/v1.14/client-server-api/#well-known-uri
+
+# Spec Notes
+
+## Versioning
 
 - Versioning is vX.Y. 
 - X changes are big, breaking. 
 - Y is smoother, with transitions managed. 
 - Endpoints are individually versioned (e.g. /v3/sync and /v4/profile)
 
-# Deprecation
+## Deprecation
 
 - Functionality begins as `stable`
 - Functionality will remain in a `deprecated` state for usually 1 version before being removed.
 - `deprecated` functionality MUST be implimented to support that version
 
-# Base Assumptions
+## Base Assumptions
 
 - JSON over HTTP/S 
 
-## Pagination
+### Pagination
 
 - `next_batch` is used to indicate when additional results are available.
 - `next_batch` should be a string token which can be passed into subsequent calls. 
@@ -26,7 +65,7 @@
 - When requesting the next batch, `from` MUST be used as the input parameter. 
 - If two directions are required, a `prev_batch` field can be used in addition to `next_batch`
 
-## Binary Data
+### Binary Data
 
 - **All binary values should be encoded and represented in JSON as unpadded base64**
 - "Unpadded base64" means [RFC 4648](https://tools.ietf.org/html/rfc4648) without "=" padding.
@@ -34,7 +73,7 @@
 - **A homeserver MAY check for correctness of a base64 encoded value at any point**
 - In the future, if an alternative to JSON is used, where binary encoding is not necessary, then base64 encoding MAY be skipped altogether. 
 
-## Canonical JSON 
+### Canonical JSON
 
 - Shortest UTF-8 JSON encoding with dictionary keys lexicographically sorted by Unicode codepoint. 
 - Numbers MUST be integers in the range `[-(2**53)+1, (2**53)-1]` without exponents or decimal places. 
@@ -56,7 +95,7 @@ def canonical_json(value):
     ).encode("UTF-8")
 ```
 
-# Client-Server APIs
+## Client-Server APIs
 *Spec Link:* https://spec.matrix.org/v1.14/client-server-api/ 
 
 - Baseline for all client-server communication is exchanging JSON objects over HTTP APIs. 
@@ -64,7 +103,7 @@ def canonical_json(value):
 - Clients are authenticated using opaque `access_token` strings
 - All server responses MUST include a `Content-Type` of `application/json` and include at least empty JSON body for 200 responses
 
-## Error Responses
+### Error Responses
 *Spec Link:* https://spec.matrix.org/v1.14/client-server-api/#standard-error-response
 
 - All API errors MUST return an error JSON object: 
@@ -81,7 +120,7 @@ def canonical_json(value):
 - Some errors have additional keys which SHOULD be present. But `error` and `errcode` are the required.
 - In general, ignore the HTTP status code unless the error is `M_UNKNOWN` in which case, look towards the HTTP status code for guidance. 
 
-### Standard Error Codes
+#### Standard Error Codes
 *Spec Link:* https://spec.matrix.org/v1.14/client-server-api/#common-error-codes)
 
 Any API endpoint can return these codes: 
@@ -98,11 +137,11 @@ Any API endpoint can return these codes:
 - `M_UNRECOGNIZED`: Expected to be coupled with a `404` HTTP status code if the endpoint is not implemented or a `405` HTTP status code if the endpoint is implemented but the incorrect HTTP method was used. 
 - `M_UNKNOWN`: Unknown. 
 
-### Other error codes
+#### Other error codes
 
 There are other error codes unique to different endpoints. For now, I am not listing them in my notes. They can be viewed here: [https://spec.matrix.org/v1.14/client-server-api/#other-error-codes](https://spec.matrix.org/v1.14/client-server-api/#other-error-codes). 
 
-## Users
+### Users
 *Spec Link*: https://spec.matrix.org/v1.14/#users
 
 `@localpart:domain`
@@ -114,27 +153,10 @@ There are other error codes unique to different endpoints. For now, I am not lis
 
 TODO: [4.3.1.1 Historical User IDs](https://spec.matrix.org/v1.14/appendices/#historical-user-ids) - it looks like there is some work around supporting a broader character set for existing sender's user names but that it shouldn't be supported for new users/events. I'm ignoring it for now and leaving this note as I don't think it's important for the initial "happy path".
 
-# Server-Server APIs
+## Server-Server APIs
 
-# Application Service APIs
+## Application Service APIs
 
-# Identity Service APIs
+## Identity Service APIs
 
-# Push Gateway APIs
-
-# Links
-
-- [Conventions for Matrix APIs](https://spec.matrix.org/v1.14/appendices/#conventions-for-matrix-apis)
-
-
-# keanu
-
-- components for JSON, base64 (options to verify)
-- JSON is pluggable, looking towards being able to use something else in the future
-- base64 encoding is tied to JSON usage (can be avoided if JSON isn't used)
-
-## Settings
-
-- settings aroudn how often/close to validate base64, basically slider from EVERYWHERE to NOWHERE. 
-- system to handle per API deprecation/status
-- API system needs to manage multiple versions of same endpoint running side by side
+## Push Gateway APIs
