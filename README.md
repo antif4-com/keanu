@@ -1,4 +1,4 @@
-
+**These notes are from version [1.14](https://spec.matrix.org/v1.14/) of the Matrix Specification. If no version is specified, then the content comes from that version of the matrix spec. **
 
 # Commonalities
 
@@ -57,6 +57,57 @@ def canonical_json(value):
         # Encode the resulting Unicode as UTF-8 bytes.
     ).encode("UTF-8")
 ```
+
+# [Client-Server APIs](https://spec.matrix.org/v1.14/client-server-api/)
+
+- Baseline for all client-server communication is exchanging JSON objects over HTTP APIs. 
+- HTTPS is RECOMMENDED. 
+- Clients are authenticated using opaque `access_token` strings
+- All server responses MUST include a `Content-Type` of `application/json` and include at least empty JSON body for 200 responses
+
+## [Error Responses](https://spec.matrix.org/v1.14/client-server-api/#standard-error-response)
+
+- All API errors MUST return an error JSON object: 
+```
+{
+  "errcode": "<error code>",
+  "error": "<error message>"
+}
+```
+
+- `error` is a human readable string, a sentence
+- `errcode` is a unique string representing the error code. 
+- `errcode` is namespaced with the _ seperator. `M_` is the matrix standard errors.
+- Some errors have additional keys which SHOULD be present. But `error` and `errcode` are the required.
+- In general, ignore the HTTP status code unless the error is `M_UNKNOWN` in which case, look towards the HTTP status code for guidance. 
+
+### [Standard Error Codes](https://spec.matrix.org/v1.14/client-server-api/#common-error-codes)
+
+Any API endpoint can return these codes: 
+
+- `M_FORBIDDEN`: Forbidden access. 
+- `M_UNKNOWN_TOKEN`: Either the access or refresh token was not recognized.
+- `M_MISSING_TOKEN`: No access toekn was specified in the request. 
+- `M_USER_LOCKED`: The account has been locked and cannot be used at this time. 
+- `M_USER_SUSPENDED`: The account has been suspended and can only be used by limited actions at this time. 
+- `M_BAD_JSON`: Request contained valid JSON, but it was malformed in some way. 
+- `M_NOT_JSON`: Request did not contain valid JSON. 
+- `M_NOT_FOUND`: No resource was found for this request. 
+- `M_LIMIT_EXCEEDED`: Too many requests. 
+- `M_UNRECOGNIZED`: Expected to be coupled with a `404` HTTP status code if the endpoint is not implemented or a `405` HTTP status code if the endpoint is implemented but the incorrect HTTP method was used. 
+- `M_UNKNOWN`: Unknown. 
+
+### Other error codes
+
+There are other error codes unique to different endpoints. For now, I am not listing them in my notes. They can be viewed here: [https://spec.matrix.org/v1.14/client-server-api/#other-error-codes](https://spec.matrix.org/v1.14/client-server-api/#other-error-codes). 
+
+# Server-Server APIs
+
+# Application Service APIs
+
+# Identity Service APIs
+
+# Push Gateway APIs
 
 # Links
 
