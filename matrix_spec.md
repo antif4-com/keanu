@@ -56,14 +56,16 @@ def canonical_json(value):
     ).encode("UTF-8")
 ```
 
-# [Client-Server APIs](https://spec.matrix.org/v1.14/client-server-api/)
+# Client-Server APIs
+*Spec Link:* https://spec.matrix.org/v1.14/client-server-api/ 
 
 - Baseline for all client-server communication is exchanging JSON objects over HTTP APIs. 
 - HTTPS is RECOMMENDED. 
 - Clients are authenticated using opaque `access_token` strings
 - All server responses MUST include a `Content-Type` of `application/json` and include at least empty JSON body for 200 responses
 
-## [Error Responses](https://spec.matrix.org/v1.14/client-server-api/#standard-error-response)
+## Error Responses
+*Spec Link:* https://spec.matrix.org/v1.14/client-server-api/#standard-error-response
 
 - All API errors MUST return an error JSON object: 
 ```
@@ -79,7 +81,8 @@ def canonical_json(value):
 - Some errors have additional keys which SHOULD be present. But `error` and `errcode` are the required.
 - In general, ignore the HTTP status code unless the error is `M_UNKNOWN` in which case, look towards the HTTP status code for guidance. 
 
-### [Standard Error Codes](https://spec.matrix.org/v1.14/client-server-api/#common-error-codes)
+### Standard Error Codes
+*Spec Link:* https://spec.matrix.org/v1.14/client-server-api/#common-error-codes)
 
 Any API endpoint can return these codes: 
 
@@ -99,7 +102,8 @@ Any API endpoint can return these codes:
 
 There are other error codes unique to different endpoints. For now, I am not listing them in my notes. They can be viewed here: [https://spec.matrix.org/v1.14/client-server-api/#other-error-codes](https://spec.matrix.org/v1.14/client-server-api/#other-error-codes). 
 
-## [Users](https://spec.matrix.org/v1.14/#users)
+## Users
+*Spec Link*: https://spec.matrix.org/v1.14/#users
 
 `@localpart:domain`
 
