@@ -1,25 +1,23 @@
-**These notes are from version [1.14](https://spec.matrix.org/v1.14/) of the Matrix Specification. If no version is specified, then the content comes from that version of the matrix spec. **
+*These notes are from version [1.14](https://spec.matrix.org/v1.14/) of the Matrix Specification. If no version is specified, then the content comes from that version of the matrix spec.*
 
-# Commonalities
-
-## Versioning
+# Versioning
 
 - Versioning is vX.Y. 
 - X changes are big, breaking. 
 - Y is smoother, with transitions managed. 
 - Endpoints are individually versioned (e.g. /v3/sync and /v4/profile)
 
-## Deprecation
+# Deprecation
 
 - Functionality begins as `stable`
 - Functionality will remain in a `deprecated` state for usually 1 version before being removed.
 - `deprecated` functionality MUST be implimented to support that version
 
-## Base Assumptions
+# Base Assumptions
 
 - JSON over HTTP/S 
 
-### Pagination
+## Pagination
 
 - `next_batch` is used to indicate when additional results are available.
 - `next_batch` should be a string token which can be passed into subsequent calls. 
@@ -28,7 +26,7 @@
 - When requesting the next batch, `from` MUST be used as the input parameter. 
 - If two directions are required, a `prev_batch` field can be used in addition to `next_batch`
 
-### Binary Data
+## Binary Data
 
 - **All binary values should be encoded and represented in JSON as unpadded base64**
 - "Unpadded base64" means [RFC 4648](https://tools.ietf.org/html/rfc4648) without "=" padding.
@@ -36,7 +34,7 @@
 - **A homeserver MAY check for correctness of a base64 encoded value at any point**
 - In the future, if an alternative to JSON is used, where binary encoding is not necessary, then base64 encoding MAY be skipped altogether. 
 
-### Canonical JSON 
+## Canonical JSON 
 
 - Shortest UTF-8 JSON encoding with dictionary keys lexicographically sorted by Unicode codepoint. 
 - Numbers MUST be integers in the range `[-(2**53)+1, (2**53)-1]` without exponents or decimal places. 
@@ -100,6 +98,17 @@ Any API endpoint can return these codes:
 ### Other error codes
 
 There are other error codes unique to different endpoints. For now, I am not listing them in my notes. They can be viewed here: [https://spec.matrix.org/v1.14/client-server-api/#other-error-codes](https://spec.matrix.org/v1.14/client-server-api/#other-error-codes). 
+
+## [Users](https://spec.matrix.org/v1.14/#users)
+
+`@localpart:domain`
+
+- Matrix user IDs are sometimes refered to as MXIDs
+- `localpart` MUST NOT be empty and MUST contain only `a-z`,`0-9`, and `._=-/+` characters.
+- `domain` is the server name of the homeserver which created the account.
+- The length of the user ID, including the `@` sigil and domain, MUST NOT exceed 255 bytes. 
+
+TODO: [4.3.1.1 Historical User IDs](https://spec.matrix.org/v1.14/appendices/#historical-user-ids) - it looks like there is some work around supporting a broader character set for existing sender's user names but that it shouldn't be supported for new users/events. I'm ignoring it for now and leaving this note as I don't think it's important for the initial "happy path".
 
 # Server-Server APIs
 
