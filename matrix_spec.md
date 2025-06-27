@@ -1,4 +1,4 @@
-*These notes are from version [1.14](https://spec.matrix.org/v1.14/) of the Matrix Specification. If no version is specified, then the content comes from that version of the matrix spec.*
+*These notes are from version [1.15](https://spec.matrix.org/v1.15/) of the Matrix Specification. If no version is specified, then the content comes from that version of the matrix spec.*
 
 # NEEDS
 
@@ -34,8 +34,8 @@ In addition, we will need to build a canonical JSON wrapper, so that the data ->
 
 These are things which need to be done, but I think we can ignore for the beginning. We shouldn't completely ignore them though, as we shouldn't paint ourselves in a corder implementing them after the fact:
 
-- Rate Limiting - https://spec.matrix.org/v1.14/client-server-api/#rate-limiting
-- Well-known URI - https://spec.matrix.org/v1.14/client-server-api/#well-known-uri
+- Rate Limiting - https://spec.matrix.org/v1.15/client-server-api/#rate-limiting
+- Well-known URI - https://spec.matrix.org/v1.15/client-server-api/#well-known-uri
 
 # Spec Notes
 
@@ -96,7 +96,7 @@ def canonical_json(value):
 ```
 
 ## Client-Server APIs
-*Spec Link:* https://spec.matrix.org/v1.14/client-server-api/ 
+*Spec Link:* https://spec.matrix.org/v1.15/client-server-api/ 
 
 - Baseline for all client-server communication is exchanging JSON objects over HTTP APIs. 
 - HTTPS is RECOMMENDED. 
@@ -104,7 +104,7 @@ def canonical_json(value):
 - All server responses MUST include a `Content-Type` of `application/json` and include at least empty JSON body for 200 responses
 
 ### Error Responses
-*Spec Link:* https://spec.matrix.org/v1.14/client-server-api/#standard-error-response
+*Spec Link:* https://spec.matrix.org/v1.15/client-server-api/#standard-error-response
 
 - All API errors MUST return an error JSON object: 
 ```
@@ -121,7 +121,7 @@ def canonical_json(value):
 - In general, ignore the HTTP status code unless the error is `M_UNKNOWN` in which case, look towards the HTTP status code for guidance. 
 
 #### Standard Error Codes
-*Spec Link:* https://spec.matrix.org/v1.14/client-server-api/#common-error-codes)
+*Spec Link:* https://spec.matrix.org/v1.15/client-server-api/#common-error-codes)
 
 Any API endpoint can return these codes: 
 
@@ -139,10 +139,10 @@ Any API endpoint can return these codes:
 
 #### Other error codes
 
-There are other error codes unique to different endpoints. For now, I am not listing them in my notes. They can be viewed here: [https://spec.matrix.org/v1.14/client-server-api/#other-error-codes](https://spec.matrix.org/v1.14/client-server-api/#other-error-codes). 
+There are other error codes unique to different endpoints. For now, I am not listing them in my notes. They can be viewed here: [https://spec.matrix.org/v1.15/client-server-api/#other-error-codes](https://spec.matrix.org/v1.15/client-server-api/#other-error-codes). 
 
 ### Users
-*Spec Link*: https://spec.matrix.org/v1.14/#users
+*Spec Link*: https://spec.matrix.org/v1.15/#users
 
 `@localpart:domain`
 
@@ -151,7 +151,7 @@ There are other error codes unique to different endpoints. For now, I am not lis
 - `domain` is the server name of the homeserver which created the account.
 - The length of the user ID, including the `@` sigil and domain, MUST NOT exceed 255 bytes. 
 
-TODO: [4.3.1.1 Historical User IDs](https://spec.matrix.org/v1.14/appendices/#historical-user-ids) - it looks like there is some work around supporting a broader character set for existing sender's user names but that it shouldn't be supported for new users/events. I'm ignoring it for now and leaving this note as I don't think it's important for the initial "happy path".
+TODO: [4.3.1.1 Historical User IDs](https://spec.matrix.org/v1.15/appendices/#historical-user-ids) - it looks like there is some work around supporting a broader character set for existing sender's user names but that it shouldn't be supported for new users/events. I'm ignoring it for now and leaving this note as I don't think it's important for the initial "happy path".
 
 ## Server-Server APIs
 
