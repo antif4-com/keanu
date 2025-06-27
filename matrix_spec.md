@@ -13,14 +13,23 @@ Design goals:
 
 Until we learn it is not a good fit, the default technological approach will be to follow the best practices of the general ruby web development community. 
 
-## Roadmap
+## Details
+
+### Versioning
+
+keanu will use [semantic versioning](https://semver.org). 
+
+### Roadmap
 
 We will build keanu in a series of stages. These stages will become greater in number and detail as we progress in the project: 
 
-- Stage 1: Non-federated clear-text chat with username/password authN
-- Stage 2: Non-federated E2EE chat with username/password authN
-- Stage 3: Non-federated E2EE chat with 3rd party authN
-- Stage 4: Federated E2EE chat with 3rd party authN
+- 0.0.1 : bare bones simple authenticated response
+- 0.1.0 : Non-federated clear-text chat with username/password authN
+- 0.2.0-alpha : Non-federated E2EE chat with username/password authN
+- 0.3.0 : Non-federated E2EE chat with 3rd party authN
+- 0.4.0-beta : Non-functionality requirements necessary to host as beta.
+- 0.5.0 : Federated E2EE chat with 3rd party authN
+- 1.0.0 : woot! :-D 
 
 This gives us an initial sequence of functionality: 
 - user cred auth
@@ -29,7 +38,6 @@ This gives us an initial sequence of functionality:
 - 3rd party authN
 - federation
 
-## Tech Details
 
 ### HTTP server
 
