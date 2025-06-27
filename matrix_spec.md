@@ -3,21 +3,26 @@
 keanu is a new, theoretical matrix homeserver implementation. It is only vaporware at the moment. 
 
 Design goals:
-- minimal zero to running server
+- minimal effort zero to running server
     - This isn't just about new users. It's about resilience and durability, even complex installations of this server should be simple and easy to deploy and update.
+    - config should be basic and minimal, keys, config file, and a dream. 
 - minimal external dependencies
   - If possible, keep dependencies to small, code packages. 
 - no cloud
 - only as fancy as required, and not an ounce more
   - being boring is a good thing in our book
 
-Until we learn it is not a good fit, the default technological approach will be to follow the best practices of the general ruby web development community. 
+Until we learn it is not a good fit, the default technological approach will be to follow the best practices of the general ruby web development community. The goal is that while a standard ruby/rails dev might not understand the code and spec, they should instantly understand the project. 
 
 ## Details
 
 ### Versioning
 
 keanu will use [semantic versioning](https://semver.org). 
+
+### Project Tracking
+
+[keanu project on github](https://github.com/orgs/antif4-com/projects/7)
 
 ### Roadmap
 
@@ -26,16 +31,16 @@ We will build keanu in a series of stages. These stages will become greater in n
 - 0.0.1 : bare bones simple authenticated response
 - 0.1.0 : Non-federated clear-text chat with username/password authN
 - 0.2.0-alpha : Non-federated E2EE chat with username/password authN
-- 0.3.0 : Non-federated E2EE chat with 3rd party authN
+- 0.3.0 : Non-federated E2EE chat with oauth authN
 - 0.4.0-beta : Non-functionality requirements necessary to host as beta.
-- 0.5.0 : Federated E2EE chat with 3rd party authN
+- 0.5.0 : Federated E2EE chat with oauth authN
 - 1.0.0 : woot! :-D 
 
 This gives us an initial sequence of functionality: 
 - user cred auth
 - core event handling
 - E2EE
-- 3rd party authN
+- oauth authN
 - federation
 
 
@@ -76,6 +81,10 @@ These are things which need to be done, but I think we can ignore for the beginn
 
 - Rate Limiting - https://spec.matrix.org/v1.15/client-server-api/#rate-limiting
 - Well-known URI - https://spec.matrix.org/v1.15/client-server-api/#well-known-uri
+
+### Dependencies
+
+- We are using github for git hosting and project management. While I think this is acceptable at the moment, and our git code is always "backed up", it is something that we should transition off of at some point. 
 
 # Matrix Spec Notes
 
