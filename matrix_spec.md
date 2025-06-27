@@ -13,23 +13,41 @@ Design goals:
 
 Until we learn it is not a good fit, the default technological approach will be to follow the best practices of the general ruby web development community. 
 
-## HTTP server
+## Roadmap
+
+We will build keanu in a series of stages. These stages will become greater in number and detail as we progress in the project: 
+
+- Stage 1: Non-federated clear-text chat with username/password authN
+- Stage 2: Non-federated E2EE chat with username/password authN
+- Stage 3: Non-federated E2EE chat with 3rd party authN
+- Stage 4: Federated E2EE chat with 3rd party authN
+
+This gives us an initial sequence of functionality: 
+- user cred auth
+- core event handling
+- E2EE
+- 3rd party authN
+- federation
+
+## Tech Details
+
+### HTTP server
 
 keanu will be a [Rack](https://github.com/rack/rack) application. We will begin using [Puma](https://github.com/puma/puma) as the HTTP server. For an HTTP framework keanu will start using [Sinatra](https://github.com/sinatra/sinatra). 
 
 These choices are not made out of unique research or requirements driven by the keanu project but rather are considered "standard" starting points for building a ruby-based web app. We will revisit these selections as the need arrises. 
 
-## Deployment
+### Deployment
 
 keanu will build into a docker image and be deployed via [Kamal](https://kamal-deploy.org). 
 
-## Access Tokens
+### Access Tokens
 
 I wanted to use [Macaroons](https://research.google/pubs/macaroons-cookies-with-contextual-caveats-for-decentralized-authorization-in-the-cloud/) for access tokens. However, the only ruby gem I was able to find was [boulangerie](https://github.com/cryptosphere/boulangerie) which looks like what we want, but it hasn't been updated in a very long time. In addition, I don't see a lot of people discussing macaroons online in a few quick searches. This might be an incorrect view, but it doesn't look as though macaroons have taken off, despite their theoretical advantage. 
 
 As a result, good ol' oauth is most likely our best starting point for access tokens: [ruby-jwt](https://github.com/jwt/ruby-jwt)
 
-## content parsing
+### content parsing
 
 - Everything is JSON, but should be built in a way that can be another encoding
 - base64 encoding is tied to JSON usage, since binary data can't be stored directly within JSON
@@ -38,19 +56,21 @@ keanu will use the standard ruby [JSON](https://github.com/ruby/json) and [base6
 
 In addition, we will need to build a canonical JSON wrapper, so that the data -> JSON -> base64 is deterministic for the same set of inputs. See [Canonical JSON](#Canonical-JSON)
 
-## Settings
+### Settings
 
 - settings aroudn how often/close to validate base64, basically slider from EVERYWHERE to NOWHERE.
 - system to handle per API deprecation/status
 - API system needs to manage multiple versions of same endpoint running side by side
-# Future Things
+
+## Future Things
 
 These are things which need to be done, but I think we can ignore for the beginning. We shouldn't completely ignore them though, as we shouldn't paint ourselves in a corder implementing them after the fact:
 
 - Rate Limiting - https://spec.matrix.org/v1.15/client-server-api/#rate-limiting
 - Well-known URI - https://spec.matrix.org/v1.15/client-server-api/#well-known-uri
 
-# Spec Notes
+# Matrix Spec Notes
+
 *These notes assume version [1.15](https://spec.matrix.org/v1.15/) of the Matrix Specification. If no version is specified, then the content comes from that version of the matrix spec.*
 
 ## Versioning
