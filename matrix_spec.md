@@ -21,6 +21,8 @@ These choices are not made out of unique research or requirements driven by the 
 
 ## Deployment
 
+keanu will build into a docker image and be deployed via [Kamal](https://kamal-deploy.org). 
+
 ## Access Tokens
 
 I wanted to use [Macaroons](https://research.google/pubs/macaroons-cookies-with-contextual-caveats-for-decentralized-authorization-in-the-cloud/) for access tokens. However, the only ruby gem I was able to find was [boulangerie](https://github.com/cryptosphere/boulangerie) which looks like what we want, but it hasn't been updated in a very long time. In addition, I don't see a lot of people discussing macaroons online in a few quick searches. This might be an incorrect view, but it doesn't look as though macaroons have taken off, despite their theoretical advantage. 
