@@ -1,14 +1,25 @@
-*These notes are from version [1.15](https://spec.matrix.org/v1.15/) of the Matrix Specification. If no version is specified, then the content comes from that version of the matrix spec.*
+# keanu
 
-# NEEDS
+keanu is a new, theoretical matrix homeserver implementation. It is only vaporware at the moment. 
 
-This is the beginning list of a design doc for keanu. 
+Design goals:
+- minimal zero to running server
+    - This isn't just about new users. It's about resilience and durability, even complex installations of this server should be simple and easy to deploy and update.
+- minimal external dependencies
+  - If possible, keep dependencies to small, code packages. 
+- no cloud
+- only as fancy as required, and not an ounce more
+  - being boring is a good thing in our book
+
+Until we learn it is not a good fit, the default technological approach will be to follow the best practices of the general ruby web development community. 
 
 ## HTTP server
 
 keanu will be a [Rack](https://github.com/rack/rack) application. We will begin using [Puma](https://github.com/puma/puma) as the HTTP server. For an HTTP framework keanu will start using [Sinatra](https://github.com/sinatra/sinatra). 
 
 These choices are not made out of unique research or requirements driven by the keanu project but rather are considered "standard" starting points for building a ruby-based web app. We will revisit these selections as the need arrises. 
+
+## Deployment
 
 ## Access Tokens
 
@@ -38,6 +49,7 @@ These are things which need to be done, but I think we can ignore for the beginn
 - Well-known URI - https://spec.matrix.org/v1.15/client-server-api/#well-known-uri
 
 # Spec Notes
+*These notes assume version [1.15](https://spec.matrix.org/v1.15/) of the Matrix Specification. If no version is specified, then the content comes from that version of the matrix spec.*
 
 ## Versioning
 
